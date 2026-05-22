@@ -1,6 +1,6 @@
 # Detecting Fraud Signals in Centers for Medicare & Medicaid Services Data
 
-> **DSA Capstone Project — University of Missouri**
+> **DSA Capstone Project - University of Missouri**
 
 ## Team
 | Name | Track |
@@ -45,7 +45,7 @@ The final model delivered a **50x lift** over the fraud prevalence baseline and 
 
 ## Final Deliverable
 
-The project findings are delivered through an interactive dashboard built in Tableau, and an agentic AI assistant — **DEMIrobato** — that uses a Model Context Protocol (MCP) framework to access the HHS OIG and Missouri Secretary of State websites in real time, improving investigators' ability to access reports, audits, investigations, and oversight findings.
+The project findings are delivered through an interactive dashboard built in Tableau, and an agentic AI assistant - **DEMIrobato** - that uses a Model Context Protocol (MCP) framework to access the HHS OIG and Missouri Secretary of State websites in real time, improving investigators' ability to access reports, audits, investigations, and oversight findings.
 
 The AI assistant is split across three repositories:
 
@@ -65,11 +65,11 @@ All data used in this project is publicly available and was accessed directly fr
 
 | Source | Description |
 |---|---|
-| CMS DMEPOS — By Referring Provider | Provider-level Medicare DMEPOS billing data (2021–2023) |
-| CMS DMEPOS — By Referring Provider and Service | Service-level DMEPOS billing data (2021–2023) |
-| CMS DMEPOS — By Supplier | Supplier-level DMEPOS billing data (2021–2023) |
-| CMS Open Payments — General Payments | Financial relationships between manufacturers and providers |
-| CMS Open Payments — Ownership Interests | Physician ownership interests in medical manufacturers |
+| CMS DMEPOS - By Referring Provider | Provider-level Medicare DMEPOS billing data (2021–2023) |
+| CMS DMEPOS - By Referring Provider and Service | Service-level DMEPOS billing data (2021–2023) |
+| CMS DMEPOS - By Supplier | Supplier-level DMEPOS billing data (2021–2023) |
+| CMS Open Payments - General Payments | Financial relationships between manufacturers and providers |
+| CMS Open Payments - Ownership Interests | Physician ownership interests in medical manufacturers |
 | HHS OIG LEIE | List of excluded individuals and entities (fraud labels) |
 | USDA RUCA Codes | Rural-urban classification by ZIP code |
 | CMS Taxonomy Crosswalk | Provider specialty classification |
@@ -82,8 +82,8 @@ All data used in this project is publicly available and was accessed directly fr
 
 All data processing and modeling was conducted across two environments:
 
-- **DSA JupyterHub** — University of Missouri shared team environment
-- **Hellbender HPC Cluster** — University of Missouri high-performance computing cluster (used for feature selection and large-scale modeling)
+- **DSA JupyterHub** - University of Missouri shared team environment
+- **Hellbender HPC Cluster** - University of Missouri high-performance computing cluster (used for feature selection and large-scale modeling)
 
 Source code for the AI assistant is version-controlled on GitHub and deployed via **Render**, which automatically deploys and updates backend servers on every push.
 
@@ -91,4 +91,4 @@ Source code for the AI assistant is version-controlled on GitHub and deployed vi
 
 ## Ethical Statement
 
-All datasets are publicly available and used in accordance with their stated purposes of transparency and research. No patient-level identifiers were used at any stage. The project produces risk signals to assist human investigators in prioritizing cases for review — it does not issue fraud determinations. All final decisions remain with qualified subject matter experts.
+All datasets are publicly available and used in accordance with their stated purposes of transparency and research. No patient-level identifiers were used at any stage. The project produces risk signals to assist human investigators in prioritizing cases for review - it does not issue fraud determinations. All final decisions remain with qualified subject matter experts.
