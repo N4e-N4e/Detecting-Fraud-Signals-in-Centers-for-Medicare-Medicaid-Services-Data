@@ -55,7 +55,8 @@ The AI assistant is split across three repositories:
 | Gemini Backend | FastAPI server powering the Gemini LLM and tool routing | [Gemini_Backend_site](https://github.com/N4e-N4e/Gemini_Backend_site) |
 | MCP Backend | Web scraping tools for OIG and Missouri SOS via Selenium | [MCP_Backend_site](https://github.com/N4e-N4e/MCP_Backend_site) |
 
-The finalized and deployed web-based AI asssitant: [DEMIrobato](https://n4e-n4e.github.io/DMEPOS.github.io/)
+### The finalized and deployed web-based AI assistant: [DEMIrobato](https://n4e-n4e.github.io/DMEPOS.github.io/)
+
 ---
 
 ## Data Sources
