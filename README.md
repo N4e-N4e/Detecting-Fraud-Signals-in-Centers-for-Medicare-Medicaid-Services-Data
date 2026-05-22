@@ -18,7 +18,7 @@
 
 ## Abstract
 
-Fraud is a pervasive and complex problem within the United States healthcare system, necessitating increasingly robust detection methods. This project integrates CMS Open Payments data, CMS DMEPOS program utilization data, and the HHS OIG List of Excluded Individuals/Entities into a standardized dataset from which interpretable, specialty-level fraud risk signals are extracted for providers in Missouri and bordering states during calendar years 2021–2023.
+Fraud is a pervasive and complex problem within the United States healthcare system, necessitating increasingly robust detection methods. This project integrates CMS Open Payments data, CMS DMEPOS program utilization data, and the HHS OIG List of Excluded Individuals/Entities into a standardized dataset from which interpretable, specialty-level fraud risk signals are extracted for providers in Missouri and bordering states during calendar years 2021-2023.
 
 An explainable hybrid model pipeline using Isolation using Nearest Neighbor Ensemble (INNE) and XGBoost is applied to determine baseline "normal" behavior across the focused population, then flag providers with a higher estimated likelihood of fraud risk — without relying on large numbers of confirmed fraud labels. For transparency, each score is paired with its top contributing anomaly factors, enabling faster and more consistent investigative prioritization.
 
