@@ -35,7 +35,7 @@ The final model delivered a **50x lift** over the fraud prevalence baseline and 
 
 ```
 ├── TeamArtifacts/                   # Sprint notebooks and source code
-├── FinalDocumentation/              # Final report and IEEE publication
+├── FinalDocumentation/              # Final report, IEEE publication and Infographic
 ├── Dashboard/                       # Final Tableau dashboard file
 ├── AI Assistant Documentation/      # Finalized architecture and usability scoring template
 └── Metadata/                        # Dataset metadata files
