@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEMIrobato - The Fraud Analysis Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-page:       #0d1117;
+      --bg-sidebar:    #111827;
+      --bg-chat:       #0d1117;
+      --bg-input:      #1a2233;
+      --bg-bubble-ai:  #1a2233;
+      --bg-bubble-usr: #166534;
+      --border:        rgba(255,255,255,0.07);
+      --green:         #22c55e;
+      --green-dim:     #16a34a;
+      --green-glow:    rgba(34,197,94,0.15);
+      --blue:          #38bdf8;
+      --red:           #f87171;
+      --text-primary:  #f0f6fc;
+      --text-secondary:#94a3b8;
+      --text-dim:      #475569;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg-page);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 300px;
+      min-width: 300px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .brand {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--green-glow);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-icon svg {
+      width: 18px; height: 18px;
+      stroke: var(--green); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .brand-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--green);
+      margin-top: 14px;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .info-section {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .info-section.how  .info-section-title { color: var(--blue); }
+    .info-section.lims .info-section-title { color: var(--red); }
+
+    .info-section-title svg {
+      width: 13px; height: 13px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .info-list li {
+      display: flex;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .info-list li .n {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      min-width: 14px;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .info-list li strong {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      font-size: 11px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-chat);
+    }
+
+    .chat-topbar {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-sidebar);
+      flex-shrink: 0;
+    }
+
+    .chat-topbar-avatar {
+      width: 34px; height: 34px;
+      background: var(--green-glow);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .chat-topbar-avatar svg {
+      width: 16px; height: 16px;
+      stroke: var(--green); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .chat-topbar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chat-topbar-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .chat-topbar-badge {
+      margin-left: auto;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.2);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* messages */
+    .chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 28px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-window::-webkit-scrollbar { width: 4px; }
+    .chat-window::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .msg {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: msgIn 0.22s ease both;
+      max-width: 780px;
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.user {
+      flex-direction: row-reverse;
+      align-self: flex-end;
+    }
+
+    .msg-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg.assistant .msg-avatar {
+      background: var(--green-glow);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    .msg.assistant .msg-avatar svg {
+      width: 14px; height: 14px;
+      stroke: var(--green); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .msg.user .msg-avatar {
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
+      color: var(--blue);
+    }
+
+    .msg-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: calc(100% - 46px);
+    }
+
+    .msg-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      letter-spacing: 0.03em;
+    }
+
+    .msg.user .msg-label { text-align: right; }
+
+    .msg-body {
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 12px 16px;
+      border-radius: 14px;
+      color: var(--text-primary);
+    }
+
+    .msg.assistant .msg-body {
+      background: var(--bg-bubble-ai);
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+    }
+
+    .msg.user .msg-body {
+      background: var(--bg-bubble-usr);
+      border: 1px solid rgba(22,101,52,0.5);
+      border-top-right-radius: 4px;
+      color: #dcfce7;
+    }
+
+    .msg-body a { color: var(--blue); text-decoration: underline; }
+    .msg-body strong { font-weight: 500; color: #e2e8f0; }
+
+    .typing-dots { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+    .typing-dots span {
+      width: 6px; height: 6px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      animation: dot 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.35; }
+      40%            { transform: scale(1);   opacity: 1; }
+    }
+
+    /* input */
+    .input-area {
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-sidebar);
+      flex-shrink: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 10px 10px 16px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .input-row:focus-within {
+      border-color: rgba(34,197,94,0.35);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.07);
+    }
+
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-primary);
+      resize: none;
+      min-height: 24px;
+      max-height: 120px;
+      line-height: 1.6;
+    }
+
+    .chat-input::placeholder { color: var(--text-dim); }
+
+    .send-btn {
+      background: var(--green-dim);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .send-btn svg {
+      width: 15px; height: 15px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .send-btn:hover   { background: var(--green); }
+    .send-btn:active  { transform: scale(0.95); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .input-hint {
+      margin-top: 9px;
+      font-size: 11.5px;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    .input-hint strong { font-weight: 500; color: var(--text-secondary); }
+
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .chat-topbar-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">DEMIrobato</div>
+          <div class="brand-sub">AI-Powered DMEPOS Fraud Assistant</div>
+        </div>
+      </div>
+      <p class="brand-desc">Search HHS OIG and Missouri Secretary of State records to identify fraud risks and exclusions.</p>
+      <div class="status-pill" style="background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.25); color: #f87171;">
+          <span class="status-dot" style="background: #f87171; animation: none;"></span>
+            Assistant Offline
+      </div>
+    </div>
+
+    <div class="info-section how">
+      <div class="info-section-title">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        How to Use
+      </div>
+      <ol class="info-list">
+        <li><span class="n">1.</span><span>Type a person's name, business name, or topic into the chat box and press <strong>Send</strong> or hit <strong>Enter</strong>.</span></li>
+        <li><span class="n">2.</span><span>The AI will search the relevant database and return a <strong>Summary</strong> and <strong>Fraud Analysis</strong>.</span></li>
+        <li><span class="n">3.</span><span>For best results, use a full name, business name, or <strong>NPI number</strong>.</span></li>
+        <li><span class="n">4.</span><span>To target a specific database, mention <strong>OIG</strong> or <strong>SOS</strong> in your question.</span></li>
+      </ol>
+    </div>
+
+    <div class="info-section lims">
+      <div class="info-section-title">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Limitations
+      </div>
+      <ol class="info-list">
+        <li><span class="n">1.</span><span>Information is sourced from two databases only — <strong>HHS OIG</strong> and <strong>Missouri Secretary of State (SOS)</strong>.</span></li>
+        <li><span class="n">2.</span><span>The AI searches <strong>one database per question</strong>. If none is specified, it will decide based on your question.</span></li>
+        <li><span class="n">3.</span><span>Responses are based on the <strong>first result returned</strong>. More results can be included but will increase response time.</span></li>
+        <li><span class="n">4.</span><span>The AI is limited to <strong>2 questions per minute</strong>. If you receive an error, wait a moment and try again.</span></li>
+      </ol>
+    </div>
+
+    <div class="sidebar-footer">
+      Data sourced from HHS OIG &amp; Missouri SOS.<br />
+      For investigative use only.
+    </div>
+  </aside>
+
+  <!-- Main chat -->
+  <main class="main">
+    <div class="chat-topbar">
+      <div class="chat-topbar-avatar">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <div class="chat-topbar-title"> DEMIrobato </div>
+        <div class="chat-topbar-sub">Fraud Analysis Assistant · HHS OIG & Missouri SOS</div>
+      </div>
+      <span class="chat-topbar-badge" style="background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.2); color: #f87171;">● Offline</span>
+    </div>
+
+    <div class="chat-window" id="chat-window"></div>
+
+    <div class="input-area">
+      <div class="input-row">
+        <textarea
+          class="chat-input"
+          id="chat-input"
+          rows="1"
+          placeholder="Ask A Question...."
+          aria-label="Chat message"
+        ></textarea>
+        <button class="send-btn" id="chat-send" aria-label="Send">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <p class="input-hint">Try: <strong>"Give me information on John Smith"</strong> &nbsp;·&nbsp; <strong>"Search SOS for Acme Medical Supply"</strong></p>
+    </div>
+  </main>
+
+</div>
+
+<script src="chat.js"></script>
+</body>
+</html>
